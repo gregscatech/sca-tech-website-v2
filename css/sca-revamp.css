@@ -124,11 +124,11 @@ h1, h2, h3, h4 {
   justify-content: space-between;
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 1.5rem 2.5rem;
+  padding: 1rem 2.5rem;
 }
 
 .nav__brand img {
-  height: 32px;
+  height: 48px;
   width: auto;
   opacity: 0.92;
   transition: opacity var(--transition);
