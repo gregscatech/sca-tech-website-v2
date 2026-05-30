@@ -16,6 +16,150 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link href="css/sca-revamp.css" rel="stylesheet" type="text/css">
+  <style>
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 9999;
+    }
+
+    .modal.is-visible {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .modal__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(3, 7, 14, 0.8 );
+      backdrop-filter: blur(4px);
+    }
+
+    .modal__content {
+      position: relative;
+      background: linear-gradient(135deg, #0a1628 0%, #051019 100%);
+      border: 1px solid rgba(55, 232, 255, 0.15);
+      border-radius: 12px;
+      padding: 3rem;
+      max-width: 420px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      background: rgba(55, 232, 255, 0.1);
+      border: 2px solid #37e8ff;
+      border-radius: 50%;
+      font-size: 28px;
+      color: #37e8ff;
+      margin-bottom: 1.5rem;
+      font-weight: 700;
+    }
+
+    .modal__title {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 0.75rem;
+      letter-spacing: -0.5px;
+    }
+
+    .modal__message {
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 1rem;
+      line-height: 1.6;
+      font-weight: 400;
+    }
+
+    .modal__subtext {
+      font-size: 0.9375rem;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 2rem;
+      line-height: 1.5;
+    }
+
+    .modal__link {
+      color: #37e8ff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: opacity 0.2s ease;
+    }
+
+    .modal__link:hover {
+      opacity: 0.8;
+    }
+
+    .modal__close {
+      background: #37e8ff;
+      color: #03070e;
+      border: none;
+      padding: 0.875rem 2rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .modal__close:hover {
+      background: #1fc9e8;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 640px) {
+      .modal__content {
+        padding: 2rem;
+      }
+
+      .modal__title {
+        font-size: 1.5rem;
+      }
+
+      .modal__message {
+        font-size: 0.9375rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
@@ -56,7 +200,7 @@
         We work with organisations in regulated and operationally sensitive industries across Australia, Latin America, and the United States. Tell us what you're dealing with.
       </p>
 
-      <form class="contact-form" id="contact-form" name="contact-form" method="post" action="#">
+      <form class="contact-form" id="contact-form" name="contact-form" method="post" action="https://formspree.io/f/meeddvae">
         <div class="contact-form__row">
           <input type="text" name="first_name" placeholder="First Name" class="contact-form__field" required>
           <input type="text" name="last_name" placeholder="Last Name" class="contact-form__field" required>
@@ -70,6 +214,20 @@
       </form>
     </div>
   </main>
+
+  <!-- ═══════════════════════════════════════
+       THANK YOU POPUP
+  ═══════════════════════════════════════ -->
+  <div class="modal" id="thankYouModal">
+    <div class="modal__overlay" id="modalOverlay"></div>
+    <div class="modal__content">
+      <div class="modal__icon">✓</div>
+      <h2 class="modal__title">Message Received.</h2>
+      <p class="modal__message">We're on it. Expect to hear from us within 24 hours.</p>
+      <p class="modal__subtext">In the meantime, check out our <a href="index.html#what-we-build" class="modal__link">latest work</a>.</p>
+      <button class="modal__close" id="closeModal">Close</button>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════
        FOOTER
@@ -92,8 +250,10 @@
     <div class="footer__legal">
       <div class="footer__legal-inner">
         <p class="footer__legal-text">
-          &copy; 2025 SCA Technology SAS &nbsp;|&nbsp; NIT: 901891665-8 &nbsp;|&nbsp; Reg. No: 241211<br>
-          Avenida Santander #75-145, The Coffee Club – Suite 405, Manizales, Caldas 170017, Colombia<br>
+          &copy; 2025 SCA Technology SAS &nbsp;|&nbsp; NIT: 901891665-8 &nbsp;|&nbsp; Reg. No: 241211  
+
+          Avenida Santander #75-145, The Coffee Club – Suite 405, Manizales, Caldas 170017, Colombia  
+
           Legal Representative: Gregory Ross Dutton &nbsp;|&nbsp; problemsolved at scatechnology dot ai
         </p>
       </div>
@@ -102,7 +262,7 @@
 
   <script>
     // ── Mobile hamburger ─────────────────────────────────────────────
-    const toggle = document.getElementById('navToggle');
+    const toggle = document.getElementById('navToggle' );
     const mobile = document.getElementById('navMobile');
     toggle.addEventListener('click', () => {
       toggle.classList.toggle('is-open');
@@ -113,6 +273,45 @@
         toggle.classList.remove('is-open');
         mobile.classList.remove('is-open');
       });
+    });
+
+    // ── Contact form submission ──────────────────────────────────────
+    const form = document.getElementById('contact-form');
+    const modal = document.getElementById('thankYouModal');
+    const closeBtn = document.getElementById('closeModal');
+    const overlay = document.getElementById('modalOverlay');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Submit to Formspree
+      fetch(form.action, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: {
+          'Accept': 'application/json'
+        }
+      }).then(response => {
+        if (response.ok) {
+          // Show thank you modal
+          modal.classList.add('is-visible');
+          // Reset form
+          form.reset();
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      }).catch(error => {
+        console.error('Error:', error);
+        alert('Something went wrong. Please try again.');
+      });
+    });
+
+    // Close modal
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('is-visible');
+    });
+    overlay.addEventListener('click', () => {
+      modal.classList.remove('is-visible');
     });
   </script>
 </body>
